@@ -1,13 +1,23 @@
 package main
 
 import "github.com/gizak/termui"
-
+import "math"
 func main() {
+
 	err := termui.Init()
 	if err != nil {
 		panic(err)
 	}
 	defer termui.Close()
+	
+	sinps := (func() []float64 {
+		n := 220
+		ps := make([]float64, n)
+		for i := range ps {
+			ps[i] = 1 + math.Sin(float64(i)/5)
+		}
+		return ps
+	})()
 
 	p := termui.NewPar(":PRESS q or Esc TO QUIT DEMO Hello World")
 	p.Height = 3
@@ -16,7 +26,17 @@ func main() {
 	p.BorderLabel = "Hello-World"
 	p.BorderFg = termui.ColorCyan
 
-	termui.Render(p)
+	lc1 := termui.NewLineChart()
+	lc1.BorderLabel = "dot-mode Line Chart"
+	lc1.Mode = "dot"
+	lc1.Data = sinps
+	lc1.Width = 26
+	lc1.Height = 12
+	lc1.X = 51
+	lc1.DotStyle = '+'
+	lc1.AxesColor = termui.ColorWhite
+	lc1.LineColor = termui.ColorYellow | termui.AttrBold
+	termui.Render(p, lc1)
 
 	termui.Handle("/sys", func(e termui.Event) {
 		k, ok := e.Data.(termui.EvtKbd)
