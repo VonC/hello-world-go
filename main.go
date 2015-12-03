@@ -9,7 +9,7 @@ func main() {
 		panic(err)
 	}
 	defer termui.Close()
-	
+
 	sinps := (func() []float64 {
 		n := 220
 		ps := make([]float64, n)
@@ -36,7 +36,18 @@ func main() {
 	lc1.DotStyle = '+'
 	lc1.AxesColor = termui.ColorWhite
 	lc1.LineColor = termui.ColorYellow | termui.AttrBold
-	termui.Render(p, lc1)
+
+	g0 := termui.NewGauge()
+	g0.Percent = 40
+	g0.Width = 50
+	g0.Height = 3
+	g0.Y = 3
+	g0.BorderLabel = "Slim Gauge"
+	g0.BarColor = termui.ColorRed
+	g0.BorderFg = termui.ColorWhite
+	g0.BorderLabelFg = termui.ColorCyan
+
+	termui.Render(p, g0, lc1)
 
 	termui.Handle("/sys", func(e termui.Event) {
 		k, ok := e.Data.(termui.EvtKbd)
